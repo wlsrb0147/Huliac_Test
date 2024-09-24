@@ -62,7 +62,7 @@ public class ImageSaver : MonoBehaviour
         }
         LoadSettings(LoadData);
         
-        
+        // 딕셔너리. map과 같은 기능
         dic.Add((int)_pair[0].x-1,(int)_pair[0].y-1);
         dic.Add((int)_pair[1].x-1,(int)_pair[1].y-1);
         dic.Add((int)_pair[2].x-1,(int)_pair[2].y-1);
@@ -178,7 +178,7 @@ public class ImageSaver : MonoBehaviour
         // 이미지 로딩
         for (int i = 0; i < _btnImagePath.Length; i++)
         {    
-            byte[] fileData = File.ReadAllBytes(_btnImagePath[i]);
+            byte[] fileData = File.ReadAllBytes(_btnImagePath[i]); // 파일을 byte로 받아옴
             char extractedNumber = _btnImagePath[i][_btnImagePath[i].Length - 5];
             int number = Convert.ToInt16(extractedNumber) - '0';
             --number;

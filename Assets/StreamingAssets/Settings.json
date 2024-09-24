@@ -1,0 +1,31 @@
+{
+  "ImagePaths": [
+    "Assets/StreamingAssets/Images/Image1.jpg",
+    "Assets/StreamingAssets/Images/Image2.jpg",
+    "Assets/StreamingAssets/Images/Image3.jpg",
+    "Assets/StreamingAssets/Images/Image4.jpg",
+    "Assets/StreamingAssets/Images/Image5.jpg"
+  ],
+  "Timer": 1,
+  "KeyCodes": [
+    "Alpha1",
+    "Alpha2",
+    "Alpha3",
+    "Alpha4",
+    "Alpha5"
+  ],
+  "Locations": [
+    {"x": -600, "y": 300},
+    {"x": -150, "y": 300},
+    {"x":  300, "y": 300},
+    {"x": -400, "y": 150},
+    {"x":  300, "y": 150}
+  ],
+  "Size": [
+    {"x": 300, "y": 100},
+    {"x": 300, "y": 100},
+    {"x": 300, "y": 200},
+    {"x": 200, "y": 100},
+    {"x": 200, "y": 100}
+  ]
+}

@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 07d3adc6325869d4d8f9cc90e88e573b
+guid: c6b153336e9492e4ea54a0dd43b0524b
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -8209931192134789094
-    second: "1\uBC88_0"
+      213: -1942690100530976606
+    second: popup5_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -152,7 +152,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: "1\uBC88_0"
+      name: popup5_0
       rect:
         serializedVersion: 2
         x: 0
@@ -167,8 +167,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: a18186e2417701e80800000000000000
-      internalID: -8209931192134789094
+      spriteID: 2a8ee2975ad2a05e0800000000000000
+      internalID: -1942690100530976606
       vertices: []
       indices: 
       edges: []

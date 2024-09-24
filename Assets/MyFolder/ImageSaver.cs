@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
@@ -26,6 +27,16 @@ public class ImageSaver : MonoBehaviour
     
     private Vector2[] _location;
     private Vector2[] _size;
+
+    ///
+    private string[] _secondPopupPath;
+    private Sprite[] _secondPopup = new Sprite[5];
+    private Vector2[] _pair;
+    Dictionary<int,int> dic = new Dictionary<int, int>();
+    public bool usePair1 = true;
+    /// 
+    
+    [SerializeField] private bool cursorVisible = true;
     private void Awake()
     {
         if (!instance)
@@ -36,8 +47,11 @@ public class ImageSaver : MonoBehaviour
         {
             Destroy(gameObject);
         }
+        
+        
+//////////////////////////////////////////
 
-        Cursor.visible = false;
+///////////////////////////////////////////
     }
 
     void Start()
@@ -47,6 +61,13 @@ public class ImageSaver : MonoBehaviour
             _soundManager = SoundManager.instance;
         }
         LoadSettings(LoadData);
+        
+        
+        dic.Add((int)_pair[0].x-1,(int)_pair[0].y-1);
+        dic.Add((int)_pair[1].x-1,(int)_pair[1].y-1);
+        dic.Add((int)_pair[2].x-1,(int)_pair[2].y-1);
+        dic.Add((int)_pair[3].x-1,(int)_pair[3].y-1);
+        dic.Add((int)_pair[4].x-1,(int)_pair[4].y-1);
     }
 
     // Update is called once per frame
@@ -67,6 +88,15 @@ public class ImageSaver : MonoBehaviour
                 }
             }
         }
+        
+        if (cursorVisible)
+        {
+            Cursor.visible = true;
+        }
+        else
+        {
+            Cursor.visible = false;
+        }
     }
     private void FixedUpdate()
     {
@@ -80,11 +110,18 @@ public class ImageSaver : MonoBehaviour
     public void ChangeSprite(int x)
     {
         popup.SetActive(true);
-        popup.GetComponent<Image>().sprite = _popupSprite[x];
         _timer = 0.0f;
         _soundManager.PlaySound();
-        // _imageSaver.currentSprite = Resources.Load<Sprite>("Button" + buttonNumber);
+        if (usePair1)
+        {
+            popup.GetComponent<Image>().sprite = _popupSprite[x];
+        }
+        else
+        {
+            popup.GetComponent<Image>().sprite = _secondPopup[dic[x]];
+        }
     }
+
 
     private void LoadSettings(Action onComplete)
     {
@@ -153,9 +190,9 @@ public class ImageSaver : MonoBehaviour
             Debug.Log(popupTempSprite[i].name);
             Debug.Log(_popupSprite[i].name);
             
-            Texture2D texture = new Texture2D(2, 2);
+            Texture2D texture = new Texture2D(2, 2); // 2x2 픽셀 생성
             
-            texture.LoadImage(fileData);
+            texture.LoadImage(fileData); // file data로 자동 조절, file data 불러옴
 
             if (texture != null)
             {
@@ -198,5 +235,17 @@ public class ImageSaver : MonoBehaviour
             rectTransform.anchoredPosition = _location[i];
             rectTransform.sizeDelta = _size[i];
         }
+        
+        //////////
+
+        _secondPopupPath = _settings.PopupPaths;
+        for (int i = 0; i < _secondPopupPath.Length; i++)
+        {
+            byte[] fileData = File.ReadAllBytes(_secondPopupPath[i]); 
+            Texture2D texture = new Texture2D(2, 2);
+            texture.LoadImage(fileData);
+            _secondPopup[i] = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), Vector2.zero);
+        }
+        _pair = _settings.ButtonPopupPair;
     }
 }

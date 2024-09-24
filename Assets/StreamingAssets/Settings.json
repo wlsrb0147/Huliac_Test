@@ -27,5 +27,19 @@
     {"x": 300, "y": 200},
     {"x": 200, "y": 100},
     {"x": 200, "y": 100}
+  ],
+  "PopupPaths": [
+    "Assets/StreamingAssets/PopupImages/popup1.png",
+    "Assets/StreamingAssets/PopupImages/popup2.png",
+    "Assets/StreamingAssets/PopupImages/popup3.png",
+    "Assets/StreamingAssets/PopupImages/popup4.png",
+    "Assets/StreamingAssets/PopupImages/popup5.png"
+  ],
+  "ButtonPopupPair": [
+    {"x": 1,"y": 5},
+    {"x": 2,"y": 4},
+    {"x": 3,"y": 3},
+    {"x": 4,"y": 2},
+    {"x": 5,"y": 1}
   ]
 }

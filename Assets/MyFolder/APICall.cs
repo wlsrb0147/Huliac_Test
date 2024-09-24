@@ -10,7 +10,7 @@ public class APICall : MonoBehaviour
     
     void Start()
     {
-        string url = "http://huliac.com/random.cfm?name=test";
+        const string url = "http://huliac.com/random.cfm?name=test";
         StartCoroutine(GetDataFromApi(url));
     }
 

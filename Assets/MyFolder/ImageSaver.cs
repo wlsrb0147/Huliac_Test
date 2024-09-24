@@ -57,31 +57,16 @@ public class ImageSaver : MonoBehaviour
         {
             if (Input.GetKeyDown(_loadedKeys[i]))
             {
-                Debug.Log(i);
-                ChangeSprite(i);
+                if (popup.activeSelf)
+                {
+                    popup.SetActive(false);
+                }
+                else
+                {
+                    ChangeSprite(i);
+                }
             }
         }
-        
-        /*if (Input.GetKeyDown(_loadedKeys[0]))
-        {
-            Debug.Log("Pressed Key : " + _loadedKeys[0]);
-        }
-        if (Input.GetKeyDown(_loadedKeys[1]))
-        {
-            Debug.Log("Pressed Key : " + _loadedKeys[1]);
-        }
-        if (Input.GetKeyDown(_loadedKeys[2]))
-        {
-            Debug.Log("Pressed Key : " + _loadedKeys[2]);
-        }
-        if (Input.GetKeyDown(_loadedKeys[3]))
-        {
-            Debug.Log("Pressed Key : " + _loadedKeys[3]);
-        }
-        if (Input.GetKeyDown(_loadedKeys[4]))
-        {
-            Debug.Log("Pressed Key : " + _loadedKeys[4]);
-        }*/
     }
     private void FixedUpdate()
     {

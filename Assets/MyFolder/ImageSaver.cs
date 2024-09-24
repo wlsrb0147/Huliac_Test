@@ -27,14 +27,17 @@ public class ImageSaver : MonoBehaviour
     
     private Vector2[] _location;
     private Vector2[] _size;
-
-    ///
+    
+    /// Pair 사용여부
     private string[] _secondPopupPath;
     private Sprite[] _secondPopup = new Sprite[5];
     private Vector2[] _pair;
     Dictionary<int,int> dic = new Dictionary<int, int>();
     public bool usePair1 = true;
-    /// 
+
+    /// Toggle
+    [SerializeField] private Toggle[] movieToggle;
+    [SerializeField] private Toggle pairToggle;
     
     [SerializeField] private bool cursorVisible = true;
     private void Awake()
@@ -68,6 +71,7 @@ public class ImageSaver : MonoBehaviour
         dic.Add((int)_pair[2].x-1,(int)_pair[2].y-1);
         dic.Add((int)_pair[3].x-1,(int)_pair[3].y-1);
         dic.Add((int)_pair[4].x-1,(int)_pair[4].y-1);
+        
     }
 
     // Update is called once per frame

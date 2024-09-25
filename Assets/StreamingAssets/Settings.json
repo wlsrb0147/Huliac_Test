@@ -6,6 +6,27 @@
     "Assets/StreamingAssets/Images/Image4.jpg",
     "Assets/StreamingAssets/Images/Image5.jpg"
   ],
+  "PopupPaths": [
+    "Assets/StreamingAssets/PopupImages/popup1.png",
+    "Assets/StreamingAssets/PopupImages/popup2.png",
+    "Assets/StreamingAssets/PopupImages/popup3.png",
+    "Assets/StreamingAssets/PopupImages/popup4.png",
+    "Assets/StreamingAssets/PopupImages/popup5.png"
+  ],
+  "MoviePaths": [
+    "Assets/StreamingAssets/Movies/movie1.mp4",
+    "Assets/StreamingAssets/Movies/movie2.mp4",
+    "Assets/StreamingAssets/Movies/movie3.mp4",
+    "Assets/StreamingAssets/Movies/movie4.mp4",
+    "Assets/StreamingAssets/Movies/movie5.mp4"
+  ],
+  "SeeMovie": [
+    false,
+    false,
+    false,
+    false,
+    false
+  ],
   "Timer": 1,
   "KeyCodes": [
     "Alpha1",
@@ -28,18 +49,25 @@
     {"x": 200, "y": 100},
     {"x": 200, "y": 100}
   ],
-  "PopupPaths": [
-    "Assets/StreamingAssets/PopupImages/popup1.png",
-    "Assets/StreamingAssets/PopupImages/popup2.png",
-    "Assets/StreamingAssets/PopupImages/popup3.png",
-    "Assets/StreamingAssets/PopupImages/popup4.png",
-    "Assets/StreamingAssets/PopupImages/popup5.png"
-  ],
-  "ButtonPopupPair": [
+  "ButtonPair": [
     {"x": 1,"y": 5},
     {"x": 2,"y": 4},
     {"x": 3,"y": 3},
     {"x": 4,"y": 2},
     {"x": 5,"y": 1}
+  ],
+  "PopupPair": [
+    {"x": 1,"y": 5},
+    {"x": 2,"y": 4},
+    {"x": 3,"y": 3},
+    {"x": 4,"y": 2},
+    {"x": 5,"y": 1}
+  ],  
+  "MoviePair": [
+  {"x": 1,"y": 5},
+  {"x": 2,"y": 4},
+  {"x": 3,"y": 3},
+  {"x": 4,"y": 2},
+  {"x": 5,"y": 1}
   ]
 }

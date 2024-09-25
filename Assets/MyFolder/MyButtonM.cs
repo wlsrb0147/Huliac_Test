@@ -21,6 +21,6 @@ public class MyButtonM : MonoBehaviour
 
     public void ButtonDown()
     {
-        _imageSaver.ChangeSprite(buttonNumber);
+        _imageSaver.OpenPopup(buttonNumber);
     }
 }

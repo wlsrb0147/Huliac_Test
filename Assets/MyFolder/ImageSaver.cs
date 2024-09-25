@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class ImageSaver : MonoBehaviour
@@ -63,8 +62,8 @@ public class ImageSaver : MonoBehaviour
     // 팝업 제어
     [HideInInspector] public int currentOpen = -1;
 
-    [HideInInspector] public bool isMovieError = false;
-    [HideInInspector] public bool isImageError = false;
+    [HideInInspector] public bool isMovieError;
+    [HideInInspector] public bool isImageError;
     
     private int _beforeDic;
     
@@ -204,6 +203,7 @@ public class ImageSaver : MonoBehaviour
             _pm.PlayMovie(_dicMov[x]);
         }
         
+        
         else if( (!isMovie || isMovieError) && !isImageError) // 영화가 아니거나 영화에 에러가 있고, 이미지에 에러가 없을 때
         {
             popupMovie.SetActive(false);
@@ -227,7 +227,7 @@ public class ImageSaver : MonoBehaviour
                     OpenPopup(x);
                 }
             }
-            //
+            
             else
             {
                 if (_popupSprite[x])

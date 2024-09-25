@@ -204,7 +204,7 @@ public class ImageSaver : MonoBehaviour
             _pm.PlayMovie(_dicMov[x]);
         }
         
-        if( (!isMovie || isMovieError) && !isImageError) // 영화가 아니거나 영화에 에러가 있고, 이미지에 에러가 없을 때
+        else if( (!isMovie || isMovieError) && !isImageError) // 영화가 아니거나 영화에 에러가 있고, 이미지에 에러가 없을 때
         {
             popupMovie.SetActive(false);
             popupImage.SetActive(true);
@@ -212,6 +212,7 @@ public class ImageSaver : MonoBehaviour
             _timer = 0.0f;
             _soundManager.PlaySound();
             
+            // 여기서 오류 발생함
             if (jsonImageControl.isOn)
             {
                 if (_secondPopup[_dicImg[x]])
@@ -226,6 +227,7 @@ public class ImageSaver : MonoBehaviour
                     OpenPopup(x);
                 }
             }
+            //
             else
             {
                 if (_popupSprite[x])

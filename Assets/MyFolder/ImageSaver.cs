@@ -200,11 +200,18 @@ public class ImageSaver : MonoBehaviour
                     _pm.MoviePath[i] = _moviePath[i];
                 }
             }
-            _pm.PlayMovie(_dicMov[x]);
+
+            if (File.Exists(_moviePath[_dicMov[x]]))
+            {
+                _pm.PlayMovie(_dicMov[x]);
+            }
+            else
+            {
+                isMovieError = true;
+            }
         }
         
-        
-        else if( (!isMovie || isMovieError) && !isImageError) // 영화가 아니거나 영화에 에러가 있고, 이미지에 에러가 없을 때
+        if( (!isMovie || isMovieError) && !isImageError) // 영화가 아니거나 영화에 에러가 있고, 이미지에 에러가 없을 때
         {
             popupMovie.SetActive(false);
             popupImage.SetActive(true);

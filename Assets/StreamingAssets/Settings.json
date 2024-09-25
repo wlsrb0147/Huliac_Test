@@ -1,24 +1,24 @@
 {
   "ImagePaths": [
-    "Assets/StreamingAssets/Images/Image1.jpg",
-    "Assets/StreamingAssets/Images/Image2.jpg",
-    "Assets/StreamingAssets/Images/Image3.jpg",
-    "Assets/StreamingAssets/Images/Image4.jpg",
-    "Assets/StreamingAssets/Images/Image5.jpg"
+    "Images/Image1.jpg",
+    "Images/Image2.jpg",
+    "Images/Image3.jpg",
+    "Images/Image4.jpg",
+    "Images/Image5.jpg"
   ],
   "PopupPaths": [
-    "Assets/StreamingAssets/PopupImages/popup1.png",
-    "Assets/StreamingAssets/PopupImages/popup2.png",
-    "Assets/StreamingAssets/PopupImages/popup3.png",
-    "Assets/StreamingAssets/PopupImages/popup4.png",
-    "Assets/StreamingAssets/PopupImages/popup5.png"
+    "PopupImages/popup1.png",
+    "PopupImages/popup2.png",
+    "PopupImages/popup3.png",
+    "PopupImages/popup4.png",
+    "PopupImages/popup5.png"
   ],
   "MoviePaths": [
-    "Assets/StreamingAssets/Movies/movie1.mp4",
-    "Assets/StreamingAssets/Movies/movie2.mp4",
-    "Assets/StreamingAssets/Movies/movie3.mp4",
-    "Assets/StreamingAssets/Movies/movie4.mp4",
-    "Assets/StreamingAssets/Movies/movie5.mp4"
+    "Movies/movie1.mp4",
+    "Movies/movie2.mp4",
+    "Movies/movie3.mp4",
+    "Movies/movie4.mp4",
+    "Movies/movie5.mp4"
   ],
   "SeeMovie": [
     false,

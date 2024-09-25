@@ -240,6 +240,8 @@ public class ImageSaver : MonoBehaviour
         string filePath = Path.Combine(Application.streamingAssetsPath, "Settings.json");
         filePath = filePath.Replace("/", "\\");
         
+        Debug.Log(filePath);
+        
         if (File.Exists(filePath))
         {
             string jsonString = File.ReadAllText(filePath);
@@ -251,12 +253,23 @@ public class ImageSaver : MonoBehaviour
         {
             Debug.LogWarning("Failed to load Settings...");
         }
+
+        string[] btnpath = new string[5];
+        string[] poppath = new string[5];
+        string[] movpath = new string[5];
+        for (int i = 0; i < 5; i++)
+        {
+            btnpath[i] = Path.Combine(Application.streamingAssetsPath, _settings.ImagePaths[i]);
+            poppath[i] = Path.Combine(Application.streamingAssetsPath, _settings.PopupPaths[i]);
+            movpath[i] = Path.Combine(Application.streamingAssetsPath, _settings.MoviePaths[i]);
+            
+        }
         
-        _btnImagePath = _settings.ImagePaths;
+        _btnImagePath = btnpath;
         Debug.Log("버튼 길이 : " + _btnImagePath.Length);
-        _secondPopupPath = _settings.PopupPaths;
+        _secondPopupPath = poppath;
         Debug.Log("팝업 길이 : " + _secondPopupPath.Length);
-        _moviePath = _settings.MoviePaths;
+        _moviePath = movpath;
         Debug.Log("영화 길이 : " + _moviePath.Length);
         _seeMovie = _settings.SeeMovie;
         Debug.Log("씨 무비 길이 : " + _seeMovie.Length);

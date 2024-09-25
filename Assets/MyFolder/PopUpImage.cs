@@ -19,9 +19,14 @@ public class PopupImage : MonoBehaviour,IPointerDownHandler
         gameObject.SetActive(false);
     }
 
+    private void OnEnable()
+    {
+        _imageSaver.timer = 0;
+    }
+
     private void OnDisable()
     {
-        _imageSaver.isMovieError = false;
         _imageSaver.currentOpen = -1;
+        _imageSaver.timer = 0;
     }
 }

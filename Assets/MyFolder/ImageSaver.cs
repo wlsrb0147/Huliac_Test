@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class ImageSaver : MonoBehaviour
@@ -32,7 +33,7 @@ public class ImageSaver : MonoBehaviour
     private PopupMovie _pm;
 
     // 타이머
-    private float _timer;
+    [HideInInspector] public float timer;
     private float _timeLimit;
     
     // 키 바인딩
@@ -61,9 +62,6 @@ public class ImageSaver : MonoBehaviour
     
     // 팝업 제어
     [HideInInspector] public int currentOpen = -1;
-
-    [HideInInspector] public bool isMovieError;
-    [HideInInspector] public bool isImageError;
     
     private int _beforeDic;
     
@@ -108,6 +106,8 @@ public class ImageSaver : MonoBehaviour
         }
         LoadSettings(LoadData);
         
+        
+        
         // 딕셔너리. map과 같은 기능
     }
     
@@ -138,8 +138,8 @@ public class ImageSaver : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        _timer += Time.fixedDeltaTime;
-        if (_timer >= _timeLimit && popupImage.activeSelf)
+        timer += Time.fixedDeltaTime;
+        if (timer >= _timeLimit && popupImage.activeSelf)
         {
             popupImage.SetActive(false);
         }
@@ -147,37 +147,16 @@ public class ImageSaver : MonoBehaviour
 
     public void OpenPopup(int x) // 값 : 0~4
     {
-        if (isMovieError && isImageError)
-        {
-            
-            isMovieError = false;
-            isImageError = false;
-            
-            Debug.LogWarning("이미지와 영화 둘 다 없음");
-            return;
-        }
-        
-        if (!isImageError && !isMovieError ) // 오류가 없다면
-        {
-            _beforeDic = x;
-        }
-        else // 오류가 있으면
-        {
-            x = _beforeDic;
-        }
-        
         if (currentOpen == x)
         {
             popupImage.SetActive(false);
             popupMovie.SetActive(false);
-
-            isMovieError = false;
-            isImageError = false;
-
+            
             return;
         }
         
         bool isMovie;
+        
         if (jsonMovieControl.isOn)
         {
             isMovie = _seeMovie[x];
@@ -186,71 +165,102 @@ public class ImageSaver : MonoBehaviour
         {
             isMovie = movieToggle[x].isOn;
         }
-        
-        if ( (isMovie || isImageError) && !isMovieError )  // 영화이고, 영화에 오류가 없음 또는 이미지에 에러있음
-        { 
-            popupImage.SetActive(false);
-            popupMovie.SetActive(true);
 
-            if (!_pm)
-            {
-                _pm = popupMovie.GetComponent<PopupMovie>();
-                for (int i = 0; i < 5; i++)
-                {
-                    _pm.MoviePath[i] = _moviePath[i];
-                }
-            }
-
-            if (File.Exists(_moviePath[_dicMov[x]]))
-            {
-                _pm.PlayMovie(_dicMov[x]);
-            }
-            else
-            {
-                isMovieError = true;
-            }
-        }
+        bool isExistMovie = File.Exists(_moviePath[_dicMov[x]]);
+        bool isExistFirstPop = _popupSprite[x];
+        bool isExistSecondPop = _secondPopup[_dicImg[x]];
         
-        if( (!isMovie || isMovieError) && !isImageError) // 영화가 아니거나 영화에 에러가 있고, 이미지에 에러가 없을 때
+        if (jsonMovieControl.isOn)
         {
-            popupMovie.SetActive(false);
-            popupImage.SetActive(true);
-            
-            _timer = 0.0f;
-            _soundManager.PlaySound();
-            
-            // 여기서 오류 발생함
-            if (jsonImageControl.isOn)
+            if (!isExistMovie && isExistSecondPop) // 이미지와 영화 둘 다 없는경우
             {
-                if (_secondPopup[_dicImg[x]])
-                {
-                    popupImage.GetComponent<Image>().sprite = _secondPopup[_dicImg[x]];
-                    isMovieError = false;
-                }
-                else
-                {
-                    isImageError = true;
-                    Debug.LogWarning(_secondPopupPath[_dicImg[x]] + "is Null");
-                    OpenPopup(x);
-                }
+                Debug.LogWarning(x+1 +"번 버튼의 이미지와 영상 둘 다 부재");
+                currentOpen = -1;
+                timer = 0;
+                return;
             }
             
-            else
+            if (isMovie) // 영화 보고싶음
             {
-                if (_popupSprite[x])
+                if (isExistMovie) // 영화 있음
                 {
-                    popupImage.GetComponent<Image>().sprite = _popupSprite[x];
-                    isMovieError = false;
+                    // 영화 재생
+                    popupImage.SetActive(false);
+                    popupMovie.SetActive(true);
+                    _pm.PlayMovie(_dicMov[x]);
                 }
-                else
+                else // 영화 없음
                 {
-                    isImageError = true;
-                    Debug.LogWarning(_popupSprite[x] + "is Null");
-                    OpenPopup(x);
+                    // 이미지 재생
+                    popupMovie.SetActive(false);
+                    popupImage.SetActive(true);
+                    popupImage.GetComponent<Image>().sprite = _secondPopup[_dicImg[x]];
+                    Debug.Log("이미지 재생");
+                }
+            }
+            else // 영화 안보고싶음
+            {
+                if (isExistSecondPop) // 이미지 있음
+                {
+                    // 이미지 재생
+                    popupMovie.SetActive(false);
+                    popupImage.SetActive(true);
+                    popupImage.GetComponent<Image>().sprite = _secondPopup[_dicImg[x]];
+                }
+                else // 이미지 없음
+                {
+                    // 영화 재생
+                    popupImage.SetActive(false);
+                    popupMovie.SetActive(true);
+                    _pm.PlayMovie(_dicMov[x]);
                 }
             }
         }
-        
+        else
+        {
+            if (!isExistMovie && isExistFirstPop) // 이미지와 영화 둘 다 없는경우
+            {
+                Debug.LogWarning(x+1 +"번 버튼의 이미지와 영상 둘 다 부재");
+                currentOpen = -1;
+                timer = 0;
+                return;
+            }
+            
+            if (isMovie) 
+            {
+                if (isExistMovie)
+                {
+                    // 영화 재생
+                    popupImage.SetActive(false);
+                    popupMovie.SetActive(true);
+                    _pm.PlayMovie(_dicMov[x]);
+                }
+                else
+                {
+                    // 이미지 재생
+                    popupMovie.SetActive(false);
+                    popupImage.SetActive(true);
+                    popupImage.GetComponent<Image>().sprite = _popupSprite[x];
+                }
+            }
+            else // 영화 안보고싶음
+            {
+                if (isExistFirstPop)
+                {
+                    // 이미지 재생
+                    popupMovie.SetActive(false);
+                    popupImage.SetActive(true);
+                    popupImage.GetComponent<Image>().sprite = _popupSprite[x];
+                }
+                else
+                {
+                    // 영화 재생
+                    popupImage.SetActive(false);
+                    popupMovie.SetActive(true);
+                    _pm.PlayMovie(_dicMov[x]);
+                }
+            }
+        }
         currentOpen = x;
     }
 
@@ -376,5 +386,14 @@ public class ImageSaver : MonoBehaviour
             rectTransform.anchoredPosition = _location[i];
             rectTransform.sizeDelta = _size[i];
         }
+        
+        // 영화 팝업에 경로 저장
+        popupMovie.SetActive(true);
+        _pm = popupMovie.GetComponent<PopupMovie>();
+        for (int i = 0; i < 5; i++)
+        {
+            _pm.MoviePath[i] = _moviePath[i];
+        }
+        popupMovie.SetActive(false);
     }
 }

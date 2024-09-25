@@ -34,8 +34,6 @@ public class PopupMovie : MonoBehaviour, IPointerClickHandler
 
     private void Start()
     {
-        
-        
         _rawImage.texture = renderTexture;
         // 비디오 소소는 Url로 가져옴
         videoPlayer.source = VideoSource.Url;
@@ -67,20 +65,9 @@ public class PopupMovie : MonoBehaviour, IPointerClickHandler
         // 비디오가 재생 준비 될때마다 AdjustSize(~~) 실행
         videoPlayer.prepareCompleted += AdjustSize;
         // 비디오 경로 설정
-
-        if (File.Exists(MoviePath[x]))
-        {
-            videoPlayer.url = MoviePath[x];
-            videoPlayer.Prepare();
-        }
-        else
-        {
-            Debug.LogWarning(MoviePath[x] + " not found");
-            _imageSaver.isMovieError = true;
-            _imageSaver.OpenPopup(_currentPlay);
-            gameObject.SetActive(false);
-        }
         
+        videoPlayer.url = MoviePath[x];
+        videoPlayer.Prepare();
         
     }
 
@@ -134,7 +121,6 @@ public class PopupMovie : MonoBehaviour, IPointerClickHandler
 
     public void VideoOff()
     {
-        _imageSaver.isImageError = false;
         gameObject.SetActive(false);
     }
 

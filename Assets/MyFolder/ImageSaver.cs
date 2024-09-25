@@ -63,8 +63,10 @@ public class ImageSaver : MonoBehaviour
     
     // 팝업 제어
     [HideInInspector] public int currentOpen = -1;
-    
+    [SerializeField] private GameObject errorButton;
+    private ErrorText _errorText;
     private int _beforeDic;
+    
     
     private void AddDictionary()
     {
@@ -179,6 +181,13 @@ public class ImageSaver : MonoBehaviour
             Debug.LogWarning(x+1 +"번 버튼의 이미지와 영상 둘 다 부재");
             currentOpen = -1;
             timer = 0;
+            errorButton.SetActive(true);
+
+            if (jsonImageControl.isOn)
+            {
+                _errorText.errortext.text = _moviePath[_dicMov[x]] + '\n' + _secondPopupPath[_dicImg[x]] + "\n 파일이 존재하지 않습니다";
+            }
+            
             return;
         }
             
@@ -382,5 +391,9 @@ public class ImageSaver : MonoBehaviour
         popupImage.SetActive(true);
         _popup = popupImage.GetComponent<Image>();
         popupImage.SetActive(false);
+        
+        errorButton.SetActive(true);
+        _errorText = errorButton.GetComponent<ErrorText>();
+        errorButton.SetActive(false);
     }
 }

@@ -263,9 +263,6 @@ public class ImageSaver : MonoBehaviour
     {
         popupMovie.SetActive(false);
     
-        Debug.Log("CloseExeute");
-        Debug.Log(currentOpen);
-        
         if (!_isClosing || currentOpen != -1)
         {
             _isClosing = true;
@@ -304,7 +301,6 @@ public class ImageSaver : MonoBehaviour
         Vector2 targetAnchorMax;
         
         
-        Debug.Log("execute");
         if (close)
         {
             Debug.Log("close");
@@ -319,10 +315,17 @@ public class ImageSaver : MonoBehaviour
             targetPivot = trs.pivot;                       
             targetAnchorMin = trs.anchorMin;               
             targetAnchorMax = trs.anchorMax;    
+            
+            
+            float size = buttons[x].GetComponent<RectTransform>().sizeDelta.x;
+            float standard = _maxSize.x - size;
+            float timeLeft =  (_rt.sizeDelta.x-size)/standard;
+            
+            Debug.Log("timeLeft :" + timeLeft);
+            time *= timeLeft;
         }
         else
         {
-            Debug.Log("open");
             initAnchoredPosition = trs.anchoredPosition;  
             initSize = trs.sizeDelta;                     
             initPivot = trs.pivot;                        
@@ -345,7 +348,13 @@ public class ImageSaver : MonoBehaviour
         }
         
         float elapsedTime = 0f;
+        
+        // defalut = time, 완료 시간, 커질수록 느려짐. maxSize - buttonSize를 1로 만듦
+        // 현재 사이즈 - 버튼 사이즈  / 맥스 사이즈 - 버튼 사이즈 = 1보다 작음, 이동거리가 줄어듦, 이미 진행되어있음 
+        // 예를 들어, 값이 0.6이다 = 40%가 진행되었다, 시간을 60%만 쓰면 된다 -> time 이 0.6t가 된다
+        // 
 
+        
         while (elapsedTime < time)
         {
             float t = elapsedTime / time;

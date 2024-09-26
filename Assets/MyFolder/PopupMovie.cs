@@ -116,7 +116,7 @@ public class PopupMovie : MonoBehaviour, IPointerClickHandler
 
     private void OnVideoEnd(VideoPlayer source)
     {
-        VideoOff();
+        //VideoOff();
     }
 
     public void VideoOff()

@@ -7,11 +7,12 @@ using UnityEngine.UI;
 public class APICall : MonoBehaviour
 {
     [SerializeField] private GameObject backGround;
-    
+    private Image _image;
     void Start()
     {
         const string url = "http://huliac.com/random.cfm?name=test";
         StartCoroutine(GetDataFromApi(url));
+        _image = backGround.GetComponent<Image>();
     }
 
     IEnumerator GetDataFromApi(string url)
@@ -41,9 +42,10 @@ public class APICall : MonoBehaviour
             float y = (float)intArray[1]/255;
             float z = (float)intArray[2]/255;
                 
-                
-            backGround.GetComponent<Image>().color = new Color(a:1, r: x, g: y, b: z); // argb값
-            Debug.Log(backGround.GetComponent<Image>().color); // background의 image컴포넌트에서 color 변경
+            
+            
+            _image.color = new Color(a:1, r: x, g: y, b: z); // argb값
+            Debug.Log(_image.color); // background의 image컴포넌트에서 color 변경
             Debug.Log(Color.magenta);
         }
     }

@@ -5,7 +5,6 @@ using UnityEngine.EventSystems;
 public class PopupImage : MonoBehaviour,IPointerDownHandler
 {
     private ImageSaver _imageSaver;
-
     private void Awake()
     {
         if (!_imageSaver)
@@ -16,7 +15,8 @@ public class PopupImage : MonoBehaviour,IPointerDownHandler
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        gameObject.SetActive(false);
+        _imageSaver.timer = 0;
+        _imageSaver.Close(_imageSaver.currentOpen);
     }
 
     private void OnEnable()

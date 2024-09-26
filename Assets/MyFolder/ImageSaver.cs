@@ -1,8 +1,8 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class ImageSaver : MonoBehaviour
@@ -66,8 +66,17 @@ public class ImageSaver : MonoBehaviour
     [SerializeField] private GameObject errorButton;
     private ErrorText _errorText;
     private int _beforeDic;
-    
-    
+
+    // 코루틴
+    private bool _usingCoroutine;
+    private Coroutine _currentOpenCoroutine;
+    private RectTransform _rt;
+    private Vector2 _maxAnchoredPosition;
+    private Vector2 _maxSize;
+    private Vector2 _maxPivot;
+    private Vector2 _maxAnchorMin;
+    private Vector2 _maxAnchorMax;
+    private bool _isClosing;
     private void AddDictionary()
     {
         _dicBtn.Add((int)_pairBtn[0].x-1,(int)_pairBtn[0].y-1);
@@ -109,8 +118,12 @@ public class ImageSaver : MonoBehaviour
         }
         LoadSettings(LoadData);
         
-        
-        
+        _rt = popupImage.GetComponent<RectTransform>();
+        _maxAnchoredPosition = _rt.anchoredPosition;  
+        _maxSize = _rt.sizeDelta;                     
+        _maxPivot = _rt.pivot;                        
+        _maxAnchorMin = _rt.anchorMin;                
+        _maxAnchorMax = _rt.anchorMax;          
         // 딕셔너리. map과 같은 기능
     }
     
@@ -141,10 +154,13 @@ public class ImageSaver : MonoBehaviour
     }
     private void FixedUpdate()
     {
+        if (_usingCoroutine) return;
+        
         timer += Time.fixedDeltaTime;
         if (timer >= _timeLimit && popupImage.activeSelf)
         {
-            popupImage.SetActive(false);
+            _usingCoroutine = true;
+            Close(currentOpen);
         }
     }
 
@@ -152,9 +168,7 @@ public class ImageSaver : MonoBehaviour
     {
         if (currentOpen == x)
         {
-            popupImage.SetActive(false);
-            popupMovie.SetActive(false);
-            
+            Close(x);
             return;
         }
         
@@ -199,6 +213,7 @@ public class ImageSaver : MonoBehaviour
             }
             else // 영화 없음
             {
+                OpenPopupEffect(x);
                 PlayImage(sprite);
                 Debug.LogWarning(x+1 +"번 버튼의 영화 부재");
             }
@@ -207,6 +222,7 @@ public class ImageSaver : MonoBehaviour
         {
             if (isExistImage) // 이미지 있음
             {
+                OpenPopupEffect(x);
                 PlayImage(sprite);
             }
             else // 이미지 없음
@@ -242,6 +258,129 @@ public class ImageSaver : MonoBehaviour
         popupImage.SetActive(true);
         _popup.sprite = sprite;
     }
+
+    public void Close(int x)
+    {
+        popupMovie.SetActive(false);
+    
+        Debug.Log("CloseExeute");
+        Debug.Log(currentOpen);
+        
+        if (!_isClosing || currentOpen != -1)
+        {
+            _isClosing = true;
+            if (_currentOpenCoroutine != null)
+            {
+                StopCoroutine(_currentOpenCoroutine);
+            }
+            _currentOpenCoroutine = StartCoroutine(EffectCoroutine(1f,x,true));
+        }
+        
+    }
+    
+    private void OpenPopupEffect(int x)
+    {
+        if (_currentOpenCoroutine != null)
+        {
+            StopCoroutine(_currentOpenCoroutine);
+        }
+        _currentOpenCoroutine = StartCoroutine(EffectCoroutine(1f,x,false));
+    }
+
+    IEnumerator EffectCoroutine(float time, int x,bool close)
+    {
+        RectTransform trs = buttons[x].GetComponent<RectTransform>();
+
+        Vector2 initAnchoredPosition;
+        Vector2 initSize;
+        Vector2 initPivot;
+        Vector2 initAnchorMin;
+        Vector2 initAnchorMax;
+        
+        Vector2 targetAnchoredPosition;
+        Vector2 targetSize;
+        Vector2 targetPivot;
+        Vector2 targetAnchorMin;
+        Vector2 targetAnchorMax;
+        
+        
+        Debug.Log("execute");
+        if (close)
+        {
+            Debug.Log("close");
+            initAnchoredPosition = _rt.anchoredPosition;  
+            initSize = _rt.sizeDelta;                     
+            initPivot = _rt.pivot;                        
+            initAnchorMin = _rt.anchorMin;                
+            initAnchorMax = _rt.anchorMax;                
+                                              
+            targetAnchoredPosition = trs.anchoredPosition; 
+            targetSize = trs.sizeDelta;                    
+            targetPivot = trs.pivot;                       
+            targetAnchorMin = trs.anchorMin;               
+            targetAnchorMax = trs.anchorMax;    
+        }
+        else
+        {
+            Debug.Log("open");
+            initAnchoredPosition = trs.anchoredPosition;  
+            initSize = trs.sizeDelta;                     
+            initPivot = trs.pivot;                        
+            initAnchorMin = trs.anchorMin;                
+            initAnchorMax = trs.anchorMax;                
+                                              
+            targetAnchoredPosition = _maxAnchoredPosition;
+            targetSize = _maxSize;            
+            targetPivot = _maxPivot;           
+            targetAnchorMin = _maxAnchorMin;       
+            targetAnchorMax = _maxAnchorMax;       
+            
+            _rt.anchoredPosition = trs.anchoredPosition;
+            _rt.sizeDelta = trs.sizeDelta;
+            _rt.pivot = trs.pivot;
+            _rt.anchorMin = trs.anchorMin;
+            _rt.anchorMax = trs.anchorMax;
+            
+            _usingCoroutine = true;
+        }
+        
+        float elapsedTime = 0f;
+
+        while (elapsedTime < time)
+        {
+            float t = elapsedTime / time;
+            // Lerp로 크기 서서히 변경
+            _rt.anchoredPosition = Vector2.Lerp(initAnchoredPosition, targetAnchoredPosition, elapsedTime / time);
+            _rt.sizeDelta = Vector2.Lerp(initSize, targetSize, elapsedTime / time);
+            _rt.pivot = Vector2.Lerp(initPivot, targetPivot, elapsedTime / time);
+            _rt.anchorMin = Vector2.Lerp(initAnchorMin, targetAnchorMin, elapsedTime / time);
+            _rt.anchorMax = Vector2.Lerp(initAnchorMax, targetAnchorMax, elapsedTime / time);
+             
+            // 시간이 흐름에 따라 증가
+            elapsedTime += Time.deltaTime;
+
+            // 다음 프레임까지 대기
+            yield return null;
+        }
+
+        // 정확한 최종 크기 설정
+        _rt.anchoredPosition = targetAnchoredPosition;
+        _rt.sizeDelta = targetSize;
+        _rt.pivot = targetPivot;
+        _rt.anchorMin = targetAnchorMin;
+        _rt.anchorMax = targetAnchorMax;
+        
+        _usingCoroutine = false;
+        _currentOpenCoroutine = null;
+
+        if (close)
+        {
+            popupImage.SetActive(false);
+            _isClosing = false;
+        }
+    }
+    
+    
     
 
     private void LoadSettings(Action onComplete)
@@ -272,6 +411,9 @@ public class ImageSaver : MonoBehaviour
             poppath[i] = Path.Combine(Application.streamingAssetsPath, _settings.PopupPaths[i]);
             movpath[i] = Path.Combine(Application.streamingAssetsPath, _settings.MoviePaths[i]);
             
+            btnpath[i] = btnpath[i].Replace("\\","/");
+            poppath[i] = poppath[i].Replace("\\","/");
+            movpath[i] = movpath[i].Replace("\\","/");
         }
         
         _btnImagePath = btnpath;
